@@ -6,10 +6,13 @@ import java.io.ObjectInput;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
-import java.io.Serializable;
 
-public class Apples implements Serializable{
+public class Apples extends EncryptableObject{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	/*
 	 * Test Object 1
 	 */

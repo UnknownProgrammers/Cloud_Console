@@ -7,12 +7,26 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.nio.channels.SocketChannel;
+import java.security.Key;
 
 public class EncryptableObject implements Serializable{
-
 	
 	
+	private transient SocketChannel sc = null;
+	public void setSocketChannel(SocketChannel s){ sc = s;}
+	public SocketChannel getSocketChannel(){return sc;}
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
+	public EncryptedObject encrypt(Key key){
+	    try{
+			return new EncryptedObject(this, key);
+		}catch(Exception e){ e.printStackTrace(); return null;}
+	}
 
 	public static EncryptableObject fromByteArray(byte[] array){
 		try{

@@ -1,7 +1,9 @@
 package com.bluefrost.nio.servernclient.server;
 
 import java.nio.channels.SocketChannel;
+import java.security.Key;
 
+import com.bluefrost.encryption.Crypto;
 import com.google.common.collect.HashBiMap;
 
 /*
@@ -44,6 +46,15 @@ public class ClientManager {
 
 		public String username = "notLoggedIn";
 		public String password = "notLoggedIn";
+		
+		private Key key = null;
+		public void setKey(Key k){key = k;}
+		public Key getKey() {
+			if(key == null) return Crypto.getPriKey();
+			return key;
+		}
+		
+		
 		
 	}
 }
