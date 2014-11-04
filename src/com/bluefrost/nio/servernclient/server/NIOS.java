@@ -191,7 +191,6 @@ public class NIOS implements Runnable{
 			Main.getEventSystem().listen(new ClientDisconnectEvent(socketChannel));
 			key.channel().close();
 			key.cancel();
-			
 			return;
 		}
 

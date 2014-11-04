@@ -9,6 +9,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+/*
+ * Created by:
+ * Blue/CyanFrost 
+ * Ellie/Eleanor <3
+ * 
+ * Date: some time in October.
+ */
+
 public class EventSystemWrapper {
 
 	public EventSystem es = new EventSystem();
