@@ -1,9 +1,9 @@
 package com.bluefrost.nio.servernclient.main;
 
-import java.io.IOException;
-
 import com.bluefrost.nio.servernclient.events.EventSystemWrapper;
+import com.bluefrost.nio.servernclient.listeners.ConnectionListener;
 import com.bluefrost.nio.servernclient.listeners.DisconnectListener;
+import com.bluefrost.nio.servernclient.listeners.MessageListener;
 import com.bluefrost.nio.servernclient.server.NIOS;
 
 /*
@@ -16,22 +16,33 @@ import com.bluefrost.nio.servernclient.server.NIOS;
 
 public class Main {
 
-	private static EventSystemWrapper esw;
+	private static EventSystemWrapper esw = new EventSystemWrapper();
 	public static EventSystemWrapper getEventSystem(){return esw;}
-	
-	public static void main(String[] args) throws IOException {
-		// TODO Auto-generated method stub
-		
-		NIOS.Worker worker = new NIOS.Worker();
-		new Thread(worker).start();
-		new Thread(new NIOS(null, 9090, worker)).start();
-		
+
+	public static void main(String[] args){
+		try{
+			
+			registerEvents();
+			//*
+			NIOS.Worker worker = new NIOS.Worker();
+			new Thread(worker).start();
+			NIOS nios = new NIOS(null, 9090, worker);
+			new Thread(nios).start();
+			//*/
+			//Thread.sleep(100);
+			//nios.end();
+
+		}catch(Exception e){e.printStackTrace();}
 	}
-	
-	
-	
-	public void registerEvents(){
+
+
+
+
+
+	public static void registerEvents(){
+		esw.addListener(new MessageListener());
 		esw.addListener(new DisconnectListener());
+		esw.addListener(new ConnectionListener());
 	}
 
 }

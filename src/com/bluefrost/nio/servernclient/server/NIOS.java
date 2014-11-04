@@ -3,7 +3,6 @@ package com.bluefrost.nio.servernclient.server;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
-import java.net.Socket;
 import java.nio.ByteBuffer;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
@@ -18,6 +17,8 @@ import java.util.List;
 import java.util.Map;
 
 import com.bluefrost.nio.servernclient.events.ClientDisconnectEvent;
+import com.bluefrost.nio.servernclient.events.ConnectionEvent;
+import com.bluefrost.nio.servernclient.events.MessageEvent;
 import com.bluefrost.nio.servernclient.main.Main;
 // The host:port combination to listen on
 // The channel on which we'll accept connections
@@ -42,6 +43,7 @@ import com.bluefrost.nio.servernclient.main.Main;
 // Accept the connection and make it non-blocking
 // Register the new SocketChannel with our Selector, indicating
 // we'd like to be notified when there's data waiting to be read
+import com.bluefrost.nio.servernclient.server.ClientManager.Client;
 
 /*
  * Created by:
@@ -58,7 +60,7 @@ public class NIOS implements Runnable{
 	private int port;
 
 	// The channel on which we'll accept connections
-	private ServerSocketChannel serverChannel;
+	public ServerSocketChannel serverChannel;
 
 	// The selector we'll be monitoring
 	private Selector selector;
@@ -80,8 +82,8 @@ public class NIOS implements Runnable{
 		this.selector = this.initSelector();
 		this.worker = worker;
 	}
-	
-	
+
+
 	public void send(SocketChannel socket, byte[] data) {
 		synchronized (this.pendingChanges) {
 			// Indicate we want the interest ops set changed
@@ -94,7 +96,7 @@ public class NIOS implements Runnable{
 					queue = new ArrayList<ByteBuffer>();
 					this.pendingData.put(socket, queue);
 				}
-				
+
 				queue.add(ByteBuffer.wrap(data));
 			}
 		}
@@ -103,8 +105,10 @@ public class NIOS implements Runnable{
 		this.selector.wakeup();
 	}
 
+	public static boolean alive = true;
+
 	public void run() {
-		while (true) {
+		while (alive) {
 			try {
 				// Process any pending changes
 				synchronized (this.pendingChanges) {
@@ -146,6 +150,7 @@ public class NIOS implements Runnable{
 				e.printStackTrace();
 			}
 		}
+		System.out.println("Ended!");
 	}
 
 	private void accept(SelectionKey key) throws IOException {
@@ -154,16 +159,21 @@ public class NIOS implements Runnable{
 
 		// Accept the connection and make it non-blocking
 		SocketChannel socketChannel = serverSocketChannel.accept();
-		Socket socket = socketChannel.socket();
+
+		ConnectionEvent event = new ConnectionEvent(socketChannel);
+
+		Main.getEventSystem().listen(event);
+		if(event.isCanceled())return;
+
 		socketChannel.configureBlocking(false);
 
 		// Register the new SocketChannel with our Selector, indicating
 		// we'd like to be notified when there's data waiting to be read
 		socketChannel.register(this.selector, SelectionKey.OP_READ);
-		try{
-			System.out.println("Accepting contact from " + socket.getInetAddress());
-		}catch(Exception e){}
+
+		ClientManager.store(new Client(), socketChannel);
 	}
+
 
 	private void read(SelectionKey key) throws IOException {
 		SocketChannel socketChannel = (SocketChannel) key.channel();
@@ -187,7 +197,6 @@ public class NIOS implements Runnable{
 			// Remote entity shut the socket down cleanly. Do the
 			// same from our end and cancel the channel.
 
-			System.out.println(socketChannel.getLocalAddress()+" has disconnected!");
 			Main.getEventSystem().listen(new ClientDisconnectEvent(socketChannel));
 			key.channel().close();
 			key.cancel();
@@ -196,6 +205,12 @@ public class NIOS implements Runnable{
 
 		// Hand the data off to our worker thread
 		this.worker.processData(this, socketChannel, this.readBuffer.array(), numRead);
+	}
+
+	public void terminateAllClients(){
+		try{
+
+		}catch(Exception e){}
 	}
 
 	private void write(SelectionKey key) throws IOException {
@@ -258,13 +273,23 @@ public class NIOS implements Runnable{
 		}
 	}
 
-
+	public void end() {
+		try{
+			alive = false;
+			synchronized(worker.queue){
+				worker.queue.add(null);
+				worker.queue.notify();
+			}
+			serverChannel.close();
+			selector.close();
+		}catch(Exception e){}
+	}
 
 
 
 	public static class Worker implements Runnable{
 
-		private List<ServerDataEvent> queue = new LinkedList<ServerDataEvent>();
+		public List<ServerDataEvent> queue = new LinkedList<ServerDataEvent>();
 
 		public void processData(NIOS server, SocketChannel socket, byte[] data, int count) {
 			byte[] dataCopy = new byte[count];
@@ -278,7 +303,8 @@ public class NIOS implements Runnable{
 		public void run() {
 			ServerDataEvent dataEvent;
 
-			while(true) {
+
+			while(alive) {
 				// Wait for data to become available
 				synchronized(queue) {
 					while(queue.isEmpty()) {
@@ -289,9 +315,11 @@ public class NIOS implements Runnable{
 					dataEvent = (ServerDataEvent) queue.remove(0);
 				}
 
-
+				if(dataEvent == null)break;
+				Main.getEventSystem().listen(new MessageEvent(dataEvent.data,dataEvent.socket));
 				dataEvent.server.send(dataEvent.socket, dataEvent.data);
 			}
+			System.out.println("Ended! Worker");
 		}
 
 		public static class ServerDataEvent{
@@ -307,8 +335,8 @@ public class NIOS implements Runnable{
 
 		}
 	}
-	
-	
-	
+
+
+
 
 }
