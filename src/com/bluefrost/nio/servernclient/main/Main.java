@@ -44,7 +44,7 @@ public class Main {
 			new Thread(nios).start();
 			//*/
 			Thread.sleep(10000);
-			nios.end();
+		//	nios.end();
 
 		}catch(Exception e){e.printStackTrace();}
 	}

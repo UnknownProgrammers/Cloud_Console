@@ -44,6 +44,8 @@ public class ClientManager {
 	
 	public static class Client{
 
+		public boolean loggedin = false;
+		
 		public String username = "notLoggedIn";
 		public String password = "notLoggedIn";
 		

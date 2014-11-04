@@ -11,6 +11,7 @@ public class ConnectionListener implements Listener{
 	public void onConnectionEvent(ConnectionEvent event){
 		try{
 			System.out.println("Accepting Connection from " + event.getSocketChannel().getLocalAddress());
+			
 		}catch(Exception e){e.printStackTrace();}
 	}
 }

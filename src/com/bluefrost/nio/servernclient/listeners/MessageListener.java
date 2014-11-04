@@ -1,7 +1,9 @@
 package com.bluefrost.nio.servernclient.listeners;
 
+import bluefrost.serializable.objects.v1.Apples;
 import bluefrost.serializable.objects.v1.EncryptableObject;
 import bluefrost.serializable.objects.v1.EncryptedObject;
+import bluefrost.serializable.objects.v1.LoginObject;
 import bluefrost.serializable.objects.v1.Utils;
 
 import com.bluefrost.nio.servernclient.events.EventSystemWrapper.EventSystem.EventHandler;
@@ -21,15 +23,29 @@ public class MessageListener implements Listener{
 				Client c = ClientManager.map.inverse().get(event.getSocketChannel());
 				Object o = Utils.fromByteArray(event.getBytes());
 				if(o instanceof EncryptedObject){
+					System.out.println("Recieved an Encrypted Object, Decrypting Now!");
 					EncryptableObject eo = ((EncryptedObject)o).decrypt(c.getKey());
 					eo.setSocketChannel(event.getSocketChannel());
+					if(!c.loggedin && !(eo instanceof LoginObject))return;
 					Main.getEventSystem().listen(eo);
 				}else if(o instanceof EncryptableObject){
 					EncryptableObject eo = (EncryptableObject)o;
+					if(!c.loggedin && !(eo instanceof LoginObject))return;
 					eo.setSocketChannel(event.getSocketChannel());
 					Main.getEventSystem().listen(eo);
 				}
 			}
 		}catch(Exception e){e.printStackTrace();}
+	}
+	
+	@EventHandler
+	public void onAppleEvent(Apples event){
+		try{
+			synchronized(ClientManager.map){
+				Client c = ClientManager.map.inverse().get(event.getSocketChannel());
+					System.out.println(c.username + " gave us an apple: " + event.a);
+				
+			}
+		}catch(Exception e){}
 	}
 }
