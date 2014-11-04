@@ -44,6 +44,8 @@ public class Main {
 			new Thread(nios).start();
 			//*/
 			Thread.sleep(10000);
+			NIOS.Worker w = new NIOS.Worker();
+			
 		//	nios.end();
 
 		}catch(Exception e){e.printStackTrace();}
