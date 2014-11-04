@@ -44,7 +44,8 @@ import com.bluefrost.nio.servernclient.main.Main;
 // Accept the connection and make it non-blocking
 // Register the new SocketChannel with our Selector, indicating
 // we'd like to be notified when there's data waiting to be read
-import com.bluefrost.nio.servernclient.server.ClientManager.Client;
+import com.bluefrost.nio.servernclient.useraccess.ClientManager;
+import com.bluefrost.nio.servernclient.useraccess.ClientManager.Client;
 
 /*
  * Created by:

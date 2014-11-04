@@ -1,4 +1,4 @@
-package com.bluefrost.nio.servernclient.server;
+package com.bluefrost.nio.servernclient.useraccess;
 
 import java.nio.channels.SocketChannel;
 import java.security.Key;

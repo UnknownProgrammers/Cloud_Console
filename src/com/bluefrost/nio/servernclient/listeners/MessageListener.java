@@ -10,8 +10,8 @@ import com.bluefrost.nio.servernclient.events.EventSystemWrapper.EventSystem.Eve
 import com.bluefrost.nio.servernclient.events.EventSystemWrapper.EventSystem.Listener;
 import com.bluefrost.nio.servernclient.events.MessageEvent;
 import com.bluefrost.nio.servernclient.main.Main;
-import com.bluefrost.nio.servernclient.server.ClientManager;
-import com.bluefrost.nio.servernclient.server.ClientManager.Client;
+import com.bluefrost.nio.servernclient.useraccess.ClientManager;
+import com.bluefrost.nio.servernclient.useraccess.ClientManager.Client;
 
 public class MessageListener implements Listener{
 

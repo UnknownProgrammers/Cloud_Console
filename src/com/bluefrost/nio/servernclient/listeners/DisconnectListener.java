@@ -3,7 +3,7 @@ package com.bluefrost.nio.servernclient.listeners;
 import com.bluefrost.nio.servernclient.events.ClientDisconnectEvent;
 import com.bluefrost.nio.servernclient.events.EventSystemWrapper.EventSystem.EventHandler;
 import com.bluefrost.nio.servernclient.events.EventSystemWrapper.EventSystem.Listener;
-import com.bluefrost.nio.servernclient.server.ClientManager;
+import com.bluefrost.nio.servernclient.useraccess.ClientManager;
 
 /*
  * Created by:

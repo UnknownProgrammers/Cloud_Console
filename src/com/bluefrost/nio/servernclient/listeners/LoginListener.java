@@ -4,8 +4,8 @@ import bluefrost.serializable.objects.v1.LoginObject;
 
 import com.bluefrost.nio.servernclient.events.EventSystemWrapper.EventSystem.EventHandler;
 import com.bluefrost.nio.servernclient.events.EventSystemWrapper.EventSystem.Listener;
-import com.bluefrost.nio.servernclient.server.ClientManager;
-import com.bluefrost.nio.servernclient.server.ClientManager.Client;
+import com.bluefrost.nio.servernclient.useraccess.ClientManager;
+import com.bluefrost.nio.servernclient.useraccess.ClientManager.Client;
 import com.bluefrost.sql.light.usermanagement.UserManager;
 
 public class LoginListener implements Listener{
