@@ -1,10 +1,13 @@
 package com.bluefrost.nio.servernclient.main;
 
+import java.io.File;
+
 import com.bluefrost.nio.servernclient.events.EventSystemWrapper;
 import com.bluefrost.nio.servernclient.listeners.ConnectionListener;
 import com.bluefrost.nio.servernclient.listeners.DisconnectListener;
 import com.bluefrost.nio.servernclient.listeners.MessageListener;
 import com.bluefrost.nio.servernclient.server.NIOS;
+import com.bluefrost.sql.light.usermanagement.UserManager;
 
 /*
  * Created by:
@@ -19,18 +22,21 @@ public class Main {
 	private static EventSystemWrapper esw = new EventSystemWrapper();
 	public static EventSystemWrapper getEventSystem(){return esw;}
 
+	public static NIOS nios;
 	public static void main(String[] args){
 		try{
 			
+			UserManager.setup(new File("C:\\Users\\Sky\\Coding\\Java\\sample.db"));
+			UserManager.createUser("root", "toor");
 			registerEvents();
 			//*
 			NIOS.Worker worker = new NIOS.Worker();
 			new Thread(worker).start();
-			NIOS nios = new NIOS(null, 9090, worker);
+			 nios = new NIOS(null, 9090, worker);
 			new Thread(nios).start();
 			//*/
-			//Thread.sleep(100);
-			//nios.end();
+			Thread.sleep(10000);
+			nios.end();
 
 		}catch(Exception e){e.printStackTrace();}
 	}

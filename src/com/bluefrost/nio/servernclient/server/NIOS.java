@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
+import java.nio.channels.ClosedSelectorException;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
@@ -147,7 +148,11 @@ public class NIOS implements Runnable{
 					}
 				}
 			} catch (Exception e) {
-				e.printStackTrace();
+				if(e instanceof ClosedSelectorException){
+					System.out.println("Expected ClosedSelectorException was thrown!");
+				}else{
+					e.printStackTrace();
+				}
 			}
 		}
 		System.out.println("Ended!");
@@ -286,7 +291,7 @@ public class NIOS implements Runnable{
 	}
 
 
-
+	
 	public static class Worker implements Runnable{
 
 		public List<ServerDataEvent> queue = new LinkedList<ServerDataEvent>();
@@ -317,7 +322,7 @@ public class NIOS implements Runnable{
 
 				if(dataEvent == null)break;
 				Main.getEventSystem().listen(new MessageEvent(dataEvent.data,dataEvent.socket));
-				dataEvent.server.send(dataEvent.socket, dataEvent.data);
+				//dataEvent.server.send(dataEvent.socket, dataEvent.data);
 			}
 			System.out.println("Ended! Worker");
 		}
