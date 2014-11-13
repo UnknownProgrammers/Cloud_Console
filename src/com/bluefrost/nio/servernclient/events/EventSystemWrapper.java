@@ -11,14 +11,14 @@ import java.util.List;
 
 /*
  * Created by:
- * Blue/CyanFrost 
+ * (Blue/Cyan)Frost 
  * Ellie/Eleanor <3
  * 
  * Date: some time in October.
  */
 
 public class EventSystemWrapper {
-
+	
 	private EventSystem es = new EventSystem();
 	@Deprecated public EventSystem getEventSystem(){return es;}
 	
@@ -42,6 +42,7 @@ public class EventSystemWrapper {
 	
 	
 	
+	
 	public static class EventSystem {
 
 
@@ -54,19 +55,20 @@ public class EventSystemWrapper {
 			for(Method m: l.getClass().getDeclaredMethods()){
 				if(true){
 					if(m.isAnnotationPresent(EventHandler.class)){
-						if(m.getParameterCount()==1){
-							if(map.containsKey(m.getParameters()[0].getType())){
+						
+						if(m.getParameterTypes().length==1){
+							if(map.containsKey(m.getParameterTypes()[0])){
 								//if map has this object listed 
-								if(map.get(m.getParameters()[0].getType())!= null){
-									addToList(m.getParameters()[0].getType(),l);
+								if(map.get(m.getParameterTypes()[0])!= null){
+									addToList(m.getParameterTypes()[0],l);
 								}else{
-									createList(m.getParameters()[0].getType());
-									addToList(m.getParameters()[0].getType(),l);
+									createList(m.getParameterTypes()[0]);
+									addToList(m.getParameterTypes()[0],l);
 								}
 							}else{
 								//if map does not have this object listed
-								createList(m.getParameters()[0].getType());
-								addToList(m.getParameters()[0].getType(),l);
+								createList(m.getParameterTypes()[0]);
+								addToList(m.getParameterTypes()[0],l);
 							}
 						}
 					}
@@ -113,8 +115,8 @@ public class EventSystemWrapper {
 			List<Method> methods = new ArrayList<Method>();
 			for(Method m: l2.getDeclaredMethods()){
 				if(m.isAnnotationPresent(EventHandler.class)){
-					if(m.getParameterCount() == 1){
-						if(m.getParameters()[0].getType().equals(l1)){
+					if(m.getParameterTypes().length == 1){
+						if(m.getParameterTypes()[0].equals(l1)){
 							methods.add(m);
 						}
 					}

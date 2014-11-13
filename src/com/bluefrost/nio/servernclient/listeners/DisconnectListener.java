@@ -1,6 +1,7 @@
 package com.bluefrost.nio.servernclient.listeners;
 
-import com.bluefrost.nio.servernclient.events.ClientDisconnectEvent;
+import java.nio.channels.SocketChannel;
+
 import com.bluefrost.nio.servernclient.events.EventSystemWrapper.EventSystem.EventHandler;
 import com.bluefrost.nio.servernclient.events.EventSystemWrapper.EventSystem.Listener;
 import com.bluefrost.nio.servernclient.useraccess.ClientManager;
@@ -14,9 +15,9 @@ import com.bluefrost.nio.servernclient.useraccess.ClientManager;
  */
 
 public class DisconnectListener implements Listener{
-	
-	
-	
+
+
+
 	@EventHandler
 	public void onDisconnectEvent(ClientDisconnectEvent event){
 		try{
@@ -24,5 +25,21 @@ public class DisconnectListener implements Listener{
 			ClientManager.remove(event.getSocketChannel());
 		}catch(Exception e){e.printStackTrace();}
 	} 
+
+
+
+
+	public static class ClientDisconnectEvent {
+
+		private SocketChannel sc;
+		public SocketChannel getSocketChannel(){return sc;}
+
+
+		public ClientDisconnectEvent(SocketChannel channel){
+			sc = channel;
+		}
+
+
+	}
+
 }
- 

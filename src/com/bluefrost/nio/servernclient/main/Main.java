@@ -3,7 +3,6 @@ package com.bluefrost.nio.servernclient.main;
 import java.io.File;
 
 import com.bluefrost.encryption.Crypto;
-import com.bluefrost.nio.servernclient.client.Client1;
 import com.bluefrost.nio.servernclient.events.EventSystemWrapper;
 import com.bluefrost.nio.servernclient.listeners.ConnectionListener;
 import com.bluefrost.nio.servernclient.listeners.DisconnectListener;
@@ -58,8 +57,6 @@ public class Main {
 			//*/
 			Thread.sleep(1000);
 			
-			Thread t = new Thread(new Client1());
-			t.start();
 			
 		//	nios.end();
 		 

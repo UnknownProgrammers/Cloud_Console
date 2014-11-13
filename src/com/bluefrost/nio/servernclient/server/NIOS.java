@@ -17,9 +17,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import com.bluefrost.nio.servernclient.events.ClientDisconnectEvent;
-import com.bluefrost.nio.servernclient.events.ConnectionEvent;
-import com.bluefrost.nio.servernclient.events.MessageEvent;
+import com.bluefrost.nio.servernclient.listeners.ConnectionListener.ConnectionEvent;
+import com.bluefrost.nio.servernclient.listeners.DisconnectListener.ClientDisconnectEvent;
+import com.bluefrost.nio.servernclient.listeners.MessageListener.MessageEvent;
 import com.bluefrost.nio.servernclient.main.Main;
 // The host:port combination to listen on
 // The channel on which we'll accept connections
