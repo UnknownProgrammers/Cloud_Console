@@ -36,7 +36,7 @@ public class Main {
 		try{
 			System.out.println("Setting up UserManager DataBase...");
 			
-			ub1 = UserBase.setup(new File("C:\\Users\\Sky\\Coding\\Java\\sample.db"));
+			ub1 = UserBase.setup(new File("C:\\JavaResources\\Simple.db"));
 
 			System.out.println("UserManager DataBase is setup!");
 			ub1.createUser("root", "toor");
