@@ -19,20 +19,26 @@ import java.util.List;
 
 public class EventSystemWrapper {
 
-	public EventSystem es = new EventSystem();
+	private EventSystem es = new EventSystem();
+	@Deprecated public EventSystem getEventSystem(){return es;}
 	
-	public synchronized void addListener(EventSystem.Listener l){
-		es.register(l);
+	public void addListener(EventSystem.Listener l){
+		synchronized(es){
+			es.register(l);
+		}
 	}
 	
-	public synchronized void removeListener(EventSystem.Listener l){
-		es.removeListener(l);
+	public void removeListener(EventSystem.Listener l){
+		synchronized(es){
+			es.removeListener(l);
+		}
 	}
 	
-	public synchronized void listen(Object o){
-		es.listen(o);
+	public void listen(Object o){
+		synchronized(es){
+			es.listen(o);
+		}
 	}
-	
 	
 	
 	

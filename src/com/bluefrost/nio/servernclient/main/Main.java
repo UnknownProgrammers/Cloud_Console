@@ -3,13 +3,14 @@ package com.bluefrost.nio.servernclient.main;
 import java.io.File;
 
 import com.bluefrost.encryption.Crypto;
+import com.bluefrost.nio.servernclient.client.Client1;
 import com.bluefrost.nio.servernclient.events.EventSystemWrapper;
 import com.bluefrost.nio.servernclient.listeners.ConnectionListener;
 import com.bluefrost.nio.servernclient.listeners.DisconnectListener;
 import com.bluefrost.nio.servernclient.listeners.LoginListener;
 import com.bluefrost.nio.servernclient.listeners.MessageListener;
 import com.bluefrost.nio.servernclient.server.NIOS;
-import com.bluefrost.sql.light.usermanagement.UserManager;
+import com.bluefrost.sql.light.usermanagement.UserBase;
 
 /*
  * Created by:
@@ -23,15 +24,23 @@ public class Main {
 
 	private static EventSystemWrapper esw = new EventSystemWrapper();
 	public static EventSystemWrapper getEventSystem(){return esw;}
-
-	public static NIOS nios;
+	
+	private static UserBase ub1;
+	public static UserBase getDefaultUserBase(){return ub1;}
+	
+	
+	private static NIOS nios;
+	public static NIOS getNIOS(){return nios;}
+	
+	@SuppressWarnings("deprecation")
 	public static void main(String[] args){
 		try{
 			System.out.println("Setting up UserManager DataBase...");
-			UserManager.setup(new File("C:\\Users\\Sky\\Coding\\Java\\sample.db"));
+			
+			ub1 = UserBase.setup(new File("C:\\Users\\Sky\\Coding\\Java\\sample.db"));
 
 			System.out.println("UserManager DataBase is setup!");
-			UserManager.createUser("root", "toor");
+			ub1.createUser("root", "toor");
 			System.out.println("Please Standby, Generating RSA Keyset...");
 			Crypto.genKeys();
 			System.out.println("RSA Keyset Generated!");
@@ -41,13 +50,19 @@ public class Main {
 			NIOS.Worker worker = new NIOS.Worker();
 			new Thread(worker).start();
 			 nios = new NIOS(null, 9090, worker);
+			 
 			new Thread(nios).start();
+			
+			
+			
 			//*/
-			Thread.sleep(10000);
-			NIOS.Worker w = new NIOS.Worker();
+			Thread.sleep(1000);
+			
+			Thread t = new Thread(new Client1());
+			t.start();
 			
 		//	nios.end();
-
+		 
 		}catch(Exception e){e.printStackTrace();}
 	}
 

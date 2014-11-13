@@ -4,6 +4,7 @@ import java.nio.channels.SocketChannel;
 import java.security.Key;
 
 import com.bluefrost.encryption.Crypto;
+import com.bluefrost.sql.light.usermanagement.UserBase.User;
 import com.google.common.collect.HashBiMap;
 
 /*
@@ -44,6 +45,8 @@ public class ClientManager {
 	
 	public static class Client{
 
+		public User userData;
+		
 		public boolean loggedin = false;
 		
 		public String username = "notLoggedIn";

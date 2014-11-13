@@ -6,33 +6,39 @@ import java.nio.ByteBuffer;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+
+import bluefrost.serializable.objects.v1.Apples;
+import bluefrost.serializable.objects.v1.LoginObject;
  
  
-public class Main {
+public class Clin {
  
     /**
      * @param args
      */
-    public static void main(String[] args) {
-        NIOC test1 = new NIOC("");
+    public static void main() {
+        NIOC test1 = new NIOC();
         Thread thread = new Thread(test1);
         thread.start();
-        //thread2.start();
     }
+    
+    
+    
+    
+    
+    
  
-    static class NIOC implements Runnable {
+    public static class NIOC implements Runnable {
  
     	public Worker worker = new Worker();
         private String message = "";
-        private Selector selector;
- 
- 
-        public NIOC(String message){
-        	
-        }
+        private Selector selector;  
+
+    	private List<ByteBuffer> pendingData = new ArrayList<ByteBuffer>();
  
         @Override
         public void run() {
@@ -71,7 +77,6 @@ public class Main {
                     }   
                 }
             } catch (IOException e1) {
-                // TODO Auto-generated catch block
                 e1.printStackTrace();
             } finally {
                 close();
@@ -82,7 +87,7 @@ public class Main {
             try {
                 selector.close();
             } catch (IOException e) {
-                // TODO Auto-generated catch block
+            	
                 e.printStackTrace();
             }
         }
@@ -111,14 +116,40 @@ public class Main {
             readBuffer.get(buff, 0, length);
             System.out.println("Server said: "+new String(buff));
         }
- 
+      //*
+        
         private void write(SelectionKey key) throws IOException {
             SocketChannel channel = (SocketChannel) key.channel();
-            channel.write(ByteBuffer.wrap(message.getBytes()));
- 
+            channel.write(ByteBuffer.wrap(new LoginObject("root","toor").toByteArray()));
             // lets get ready to read.
             key.interestOps(SelectionKey.OP_READ);
-        }
+        }//*/
+       /*
+        private void write(SelectionKey key) throws IOException {
+    		SocketChannel socketChannel = (SocketChannel) key.channel();
+
+    		synchronized (this.pendingData) {
+    			
+
+    			// Write until there's not more data ...
+    			while (!pendingData.isEmpty()) {
+    				ByteBuffer buf = (ByteBuffer) pendingData.get(0);
+    				socketChannel.write(buf);
+    				if (buf.remaining() > 0) {
+    					// ... or the socket's buffer fills up
+    					break;
+    				}
+    				pendingData.remove(0);
+    			}
+
+    			if (pendingData.isEmpty()) {
+    				// We wrote away all data, so we're no longer interested
+    				// in writing on this socket. Switch back to waiting for
+    				// data.
+    				key.interestOps(SelectionKey.OP_READ);
+    			}
+    		}
+    	}//*/
  
         private void connect(SelectionKey key) throws IOException {
             SocketChannel channel = (SocketChannel) key.channel();
@@ -128,8 +159,14 @@ public class Main {
             channel.configureBlocking(false);
             channel.register(selector, SelectionKey.OP_WRITE);
         }
+        
+        
     }
     
+
+
+	
+
     
 
 	public static class Worker implements Runnable{
