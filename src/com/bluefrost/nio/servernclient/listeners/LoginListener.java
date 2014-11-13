@@ -1,11 +1,8 @@
 package com.bluefrost.nio.servernclient.listeners;
 
-import java.security.Key;
-
-import bluefrost.serializable.objects.v1.KeyObject;
+import bluefrost.serializable.objects.v1.LoggedInSuccessObject;
 import bluefrost.serializable.objects.v1.LoginObject;
 
-import com.bluefrost.encryption.Crypto;
 import com.bluefrost.nio.servernclient.events.EventSystemWrapper.EventSystem.EventHandler;
 import com.bluefrost.nio.servernclient.events.EventSystemWrapper.EventSystem.Listener;
 import com.bluefrost.nio.servernclient.main.Main;
@@ -27,9 +24,10 @@ public class LoginListener implements Listener{
 					c.password = event.getPassword();
 					c.loggedin = true;
 					c.userData = u;
-					Key k = Crypto.randomAESKey();
-					c.setKey(k);
-					Main.getNIOS().send(event.getSocketChannel(),new KeyObject(k).encrypt(event.getKey()).toByteArray());
+					Main.getNIOS().send(event.getSocketChannel(), new LoggedInSuccessObject().toByteArray());
+					//Key k = Crypto.randomAESKey();
+					//c.setKey(k);
+					//Main.getNIOS().send(event.getSocketChannel(),new KeyObject(k).encrypt(event.getKey()).toByteArray());
 						//c.setKey();
 				}
 			}else{

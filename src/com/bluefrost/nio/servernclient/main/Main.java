@@ -6,6 +6,7 @@ import com.bluefrost.encryption.Crypto;
 import com.bluefrost.nio.servernclient.events.EventSystemWrapper;
 import com.bluefrost.nio.servernclient.listeners.ConnectionListener;
 import com.bluefrost.nio.servernclient.listeners.DisconnectListener;
+import com.bluefrost.nio.servernclient.listeners.KeyObjectListener;
 import com.bluefrost.nio.servernclient.listeners.LoginListener;
 import com.bluefrost.nio.servernclient.listeners.MessageListener;
 import com.bluefrost.nio.servernclient.server.NIOS;
@@ -72,6 +73,7 @@ public class Main {
 		esw.addListener(new MessageListener());
 		esw.addListener(new DisconnectListener());
 		esw.addListener(new ConnectionListener());
+		esw.addListener(new KeyObjectListener());
 	}
 
 }

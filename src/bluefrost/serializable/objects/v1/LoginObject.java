@@ -14,12 +14,8 @@ public class LoginObject extends EncryptableObject{
 	private String password;
 	public String getPassword(){return password;}
 	
-	private Key k;
-	public Key getKey(){return k;}
-	
-	public LoginObject(String u, String p, Key k){
+	public LoginObject(String u, String p){
 		username = u;
 		password = p;
-		this.k = k;
 	}
 }

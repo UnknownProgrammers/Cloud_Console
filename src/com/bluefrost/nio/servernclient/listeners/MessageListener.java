@@ -5,10 +5,10 @@ import java.nio.channels.SocketChannel;
 import bluefrost.serializable.objects.v1.Apples;
 import bluefrost.serializable.objects.v1.EncryptableObject;
 import bluefrost.serializable.objects.v1.EncryptedObject;
-import bluefrost.serializable.objects.v1.KeyObject;
 import bluefrost.serializable.objects.v1.LoginObject;
 import bluefrost.serializable.objects.v1.Utils;
 
+import com.bluefrost.encryption.Crypto;
 import com.bluefrost.nio.servernclient.events.EventSystemWrapper.EventSystem.EventHandler;
 import com.bluefrost.nio.servernclient.events.EventSystemWrapper.EventSystem.Listener;
 import com.bluefrost.nio.servernclient.main.Main;
@@ -27,7 +27,13 @@ public class MessageListener implements Listener{
 				if(o instanceof EncryptedObject){
 					System.out.println("Recieved an Encrypted Object, Decrypting Now!");
 					EncryptableObject eo = ((EncryptedObject)o).decrypt(c.getKey());
-					if(eo == null){System.out.println("NULLLL");}
+					if(eo == null){
+						System.out.println("NULLLL");
+						eo = ((EncryptedObject)o).decrypt(Crypto.getPriKey());
+						if(eo == null){
+							System.out.println("DoubleNull");
+						}
+					}
 					eo.setSocketChannel(event.getSocketChannel());
 					System.out.println("Object instanceof " +eo.getClass().getName());
 					if(!c.loggedin && !(eo instanceof LoginObject))return;
