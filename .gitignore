@@ -35,6 +35,8 @@ Icon
 .Spotlight-V100
 .Trashes
 
+bin/
+
 # Directories potentially created on remote AFP share
 .AppleDB
 .AppleDesktop
