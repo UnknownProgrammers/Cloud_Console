@@ -4,6 +4,7 @@ import java.nio.channels.SocketChannel;
 import java.security.Key;
 
 import com.bluefrost.encryption.Crypto;
+import com.bluefrost.sql.light.usermanagement.UserBase.PermissionsList;
 import com.bluefrost.sql.light.usermanagement.UserBase.User;
 import com.google.common.collect.HashBiMap;
 
@@ -56,12 +57,18 @@ public class ClientManager {
 
 	public static class Client{
 
-		public User userData;
+		private PermissionsList list;
+		public PermissionsList getPermissions(){return list;}
+		
+		private boolean loggedin = false;
+		public boolean isLoggedIn(){return loggedin;}
 
-		public boolean loggedin = false;
-
-		public String username = "notLoggedIn";
-		public String password = "notLoggedIn";
+		private String displayname = "null";
+		public String getDisplayName(){return displayname;}
+		private String username = "notLoggedIn";
+		public String getUsername(){return username;}
+		private String password = "notLoggedIn";
+		public String getPassword(){return password;}
 
 		private Key key = null;
 		public void setKey(Key k){key = k;}
@@ -70,7 +77,13 @@ public class ClientManager {
 			return key;
 		}
 
-
+		public void set(User u){
+			this.list = u.list;
+			this.username = u.username;
+			this.password = u.password;
+			loggedin = true;
+			this.displayname = u.displayname;
+		}
 
 	}
 }
