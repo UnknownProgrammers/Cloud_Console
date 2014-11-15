@@ -24,11 +24,8 @@ public class DisconnectListener implements Listener{
 	public void onDisconnectEvent(ClientDisconnectEvent event){
 		try{
 			Client c = ClientManager.get(event.sc);
-			if(c.loggedin){
-				System.out.println(c.username + " Disconnected!");
-			}else{
-				System.out.println(event.sc.getLocalAddress()+" Disconnected!");
-			}
+			if(c.isLoggedIn()){System.out.println(c.getUsername() + " Disconnected!");}
+			else{System.out.println(event.sc.getLocalAddress()+" Disconnected!");}
 			ClientManager.remove(event.getSocketChannel());
 			IPMap.remove(event.getSocketChannel().getLocalAddress());
 		}catch(Exception e){e.printStackTrace();}
