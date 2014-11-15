@@ -288,6 +288,11 @@ public class UserBase {
 		private static final long serialVersionUID = 1L;
 		public List<Permission> permsList = new ArrayList<Permission>();
 
+		public boolean hasPermission(Permission p){
+			if(permsList.contains(p))return true;
+			return false;
+		}
+		
 		public static enum Permission{
 			Console_, //All Console
 			Console_Read,
@@ -337,10 +342,10 @@ public class UserBase {
 	}
 
 	public static class User{
-		String username;
-		String password;
-		String displayname;
-		PermissionsList list;
+		public String username;
+		public String password;
+		public String displayname;
+		public PermissionsList list;
 
 		public User(Object... s){
 			username = (String) s[0];
