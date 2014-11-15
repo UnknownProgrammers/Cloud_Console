@@ -32,12 +32,8 @@ public class Crypto
 		pubkey = keyPair.getPublic();
 	}
 
-	/**
-	 * Encrypt Data
-	 * @param data
-	 * @throws IOException
-	 */
-	public static byte[] encryptData(byte[] data) {
+	
+	@Deprecated public static byte[] encryptData(byte[] data) {
 		byte[] encryptedData = null;
 		try {
 			Cipher cipher = Cipher.getInstance("RSA");
@@ -47,12 +43,8 @@ public class Crypto
 		return encryptedData;
 	}
 
-	/**
-	 * Encrypt Data
-	 * @param data
-	 * @throws IOException
-	 */
-	public static byte[] decryptData(byte[] data) {
+	
+	@Deprecated public static byte[] decryptData(byte[] data) {
 		byte[] descryptedData = null;
 		try {
 			Cipher cipher = Cipher.getInstance("RSA");
@@ -61,6 +53,37 @@ public class Crypto
 		} catch (Exception e) {e.printStackTrace();} 
 		return descryptedData;
 	}
+	
+
+	public static byte[] encryptData(byte[] data, Key k) {
+		byte[] encryptedData = null;
+		try {
+			String alg = "";
+			if(k instanceof PublicKey){alg = "RSA";}
+			else{alg = "AES";}
+			Cipher cipher = Cipher.getInstance(alg);
+			cipher.init(Cipher.ENCRYPT_MODE, pubkey);
+			encryptedData = cipher.doFinal(data);
+		} catch (Exception e) {e.printStackTrace();} 
+		return encryptedData;
+	}
+
+	
+	public static byte[] decryptData(byte[] data, Key k) {
+		byte[] descryptedData = null;
+		try {
+			String alg = "";
+			if(k instanceof PrivateKey){alg = "RSA";}
+			else{alg = "AES";}
+			Cipher cipher = Cipher.getInstance(alg);
+			cipher.init(Cipher.DECRYPT_MODE, k);
+			descryptedData = cipher.doFinal(data);
+		} catch (Exception e) {e.printStackTrace();} 
+		return descryptedData;
+	}
+	
+	
+	
 	
 	public static Key randomAESKey(){
 		SecureRandom sr = new SecureRandom();
