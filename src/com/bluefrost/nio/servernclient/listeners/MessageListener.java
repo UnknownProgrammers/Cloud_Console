@@ -19,34 +19,23 @@ public class MessageListener implements Listener{
 
 
 	@EventHandler
-	public void saySomething(MessageEvent event){
+	public void onMessageEvent(MessageEvent event){
 		try{
-			synchronized(ClientManager.map.inverse().get(event.getSocketChannel())){
-				Client c = ClientManager.map.inverse().get(event.getSocketChannel());
-				Object o = Utils.fromByteArray(event.getBytes());
-				if(o instanceof EncryptedObject){
-					System.out.println("Recieved an Encrypted Object, Decrypting Now!");
-					EncryptableObject eo = ((EncryptedObject)o).decrypt(c.getKey());
-					if(eo == null){
-						System.out.println("NULLLL");
-						eo = ((EncryptedObject)o).decrypt(Crypto.getPriKey());
-						if(eo == null){
-							System.out.println("DoubleNull");
-						}
-					}
-					eo.setSocketChannel(event.getSocketChannel());
-					System.out.println("Object instanceof " +eo.getClass().getName());
-					if(!c.loggedin && !(eo instanceof LoginObject))return;
-					Main.getEventSystem().listen(eo);
-				}else if(o instanceof EncryptableObject){
-					EncryptableObject eo = (EncryptableObject)o;
-					if(!c.loggedin && !(eo instanceof LoginObject))return;
-					eo.setSocketChannel(event.getSocketChannel());
-					Main.getEventSystem().listen(eo);
+			Object o = Utils.fromByteArray(event.b);
+			Client c = ClientManager.get(event.sc);
+			if(o instanceof EncryptedObject){o = ((EncryptedObject)o).decrypt(c.getKey());}
+			System.out.println("Object is: " + o.getClass().getSimpleName());
+			if(c.loggedin){
+				Main.getEventSystem().listen(o);
+			}else{
+				if(o instanceof LoginObject){
+					Main.getEventSystem().listen(o);
 				}
 			}
-		}catch(Exception e){e.printStackTrace();}
+		}catch(Exception e){}
 	}
+	
+	
 
 	@EventHandler
 	public void onAppleEvent(Apples event){

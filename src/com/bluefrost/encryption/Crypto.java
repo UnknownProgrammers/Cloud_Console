@@ -64,7 +64,7 @@ public class Crypto
 	
 	public static Key randomAESKey(){
 		SecureRandom sr = new SecureRandom();
-		byte[] key = new byte[32];
+		byte[] key = new byte[16];
 		sr.nextBytes(key);
 		return new SecretKeySpec(key,"AES");
 	}

@@ -77,7 +77,8 @@ public class NIOS implements Runnable{
 
 	// Maps a SocketChannel to a list of ByteBuffer instances
 	private Map<SocketChannel, List<ByteBuffer>> pendingData = new HashMap<SocketChannel, List<ByteBuffer>>();
-
+	
+	
 	public NIOS(InetAddress hostAddress, int port, Worker worker) throws IOException {
 		this.hostAddress = hostAddress;
 		this.port = port;
@@ -169,14 +170,22 @@ public class NIOS implements Runnable{
 		ConnectionEvent event = new ConnectionEvent(socketChannel);
 
 		Main.getEventSystem().listen(event);
-		if(event.isCanceled())return;
+		if(event.isCanceled()){
+			try{
+				
+				//key.cancel();
+				socketChannel.close();
+				return;
+			}catch(Exception e){}
+		}
+		
 
 		socketChannel.configureBlocking(false);
 
 		// Register the new SocketChannel with our Selector, indicating
 		// we'd like to be notified when there's data waiting to be read
 		socketChannel.register(this.selector, SelectionKey.OP_READ);
-
+		
 		ClientManager.store(new Client(), socketChannel);
 	}
 
@@ -194,6 +203,7 @@ public class NIOS implements Runnable{
 		} catch (IOException e) {
 			// The remote forcibly closed the connection, cancel
 			// the selection key and close the channel.
+			Main.getEventSystem().listen(new ClientDisconnectEvent(socketChannel));
 			key.cancel();
 			socketChannel.close();
 			return;
@@ -223,7 +233,8 @@ public class NIOS implements Runnable{
 		SocketChannel socketChannel = (SocketChannel) key.channel();
 
 		synchronized (this.pendingData) {
-			List<?> queue = (List<?>) this.pendingData.get(socketChannel);
+			List<ByteBuffer> queue = (List<ByteBuffer>) this.pendingData.get(socketChannel);
+			
 
 			// Write until there's not more data ...
 			while (!queue.isEmpty()) {

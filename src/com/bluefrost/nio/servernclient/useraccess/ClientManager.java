@@ -19,47 +19,58 @@ public class ClientManager {
 
 	public static HashBiMap<Client, SocketChannel> map = HashBiMap.create();
 
-	public synchronized static Object get(Object o){
-		if(o instanceof Client){
-			return map.get((Client)o);
+
+	public static SocketChannel get(Client c){
+		synchronized(map){
+			return map.get(c);
 		}
-		if(o instanceof SocketChannel){
-			return map.inverse().get((SocketChannel)o);
-		}
-		return null;
-	}
-		
-	public synchronized static void store(Client c, SocketChannel sc){
-		map.put(c, sc);
 	}
 
-	public synchronized static void remove(Object o){
-		if(o instanceof Client){
-			map.remove((Client)o);
-		}
-		if(o instanceof SocketChannel){
-			map.inverse().remove((SocketChannel)o);
+	public static Client get(SocketChannel sc){
+		synchronized(map){
+			return map.inverse().get(sc);
 		}
 	}
 	
-	
+
+	public  static void store(Client c, SocketChannel sc){
+		synchronized(map){
+			map.put(c, sc);
+		}
+	}
+
+	public static void remove(Object o){
+		if(o instanceof Client){
+			synchronized(map){
+				map.remove((Client)o);
+			}
+		}
+		if(o instanceof SocketChannel){
+			synchronized(map){
+				map.inverse().remove((SocketChannel)o);
+			}
+		}
+		
+	}
+
+
 	public static class Client{
 
 		public User userData;
-		
+
 		public boolean loggedin = false;
-		
+
 		public String username = "notLoggedIn";
 		public String password = "notLoggedIn";
-		
+
 		private Key key = null;
 		public void setKey(Key k){key = k;}
 		public Key getKey() {
 			if(key == null) return Crypto.getPriKey();
 			return key;
 		}
-		
-		
-		
+
+
+
 	}
 }

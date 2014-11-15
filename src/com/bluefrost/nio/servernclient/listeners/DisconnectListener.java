@@ -5,6 +5,8 @@ import java.nio.channels.SocketChannel;
 import com.bluefrost.nio.servernclient.events.EventSystemWrapper.EventSystem.EventHandler;
 import com.bluefrost.nio.servernclient.events.EventSystemWrapper.EventSystem.Listener;
 import com.bluefrost.nio.servernclient.useraccess.ClientManager;
+import com.bluefrost.nio.servernclient.useraccess.IPMap;
+import com.bluefrost.nio.servernclient.useraccess.ClientManager.Client;
 
 /*
  * Created by:
@@ -21,8 +23,14 @@ public class DisconnectListener implements Listener{
 	@EventHandler
 	public void onDisconnectEvent(ClientDisconnectEvent event){
 		try{
-			System.out.println(event.getSocketChannel().getLocalAddress() +" Disconnected!");
+			Client c = ClientManager.get(event.sc);
+			if(c.loggedin){
+				System.out.println(c.username + " Disconnected!");
+			}else{
+				System.out.println(event.sc.getLocalAddress()+" Disconnected!");
+			}
 			ClientManager.remove(event.getSocketChannel());
+			IPMap.remove(event.getSocketChannel().getLocalAddress());
 		}catch(Exception e){e.printStackTrace();}
 	} 
 

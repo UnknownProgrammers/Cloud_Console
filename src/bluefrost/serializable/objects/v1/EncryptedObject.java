@@ -29,7 +29,7 @@ public class EncryptedObject implements Serializable{
 		String Algrithem;
 		if(key instanceof PrivateKey){Algrithem = "RSA";}
 		else{Algrithem = "AES";}
-		if(encrypted == null) return null;
+		if(encrypted == null) {System.out.println("NULL");return null;}
 		Cipher decrypt =  Cipher.getInstance(Algrithem);  
 		decrypt.init(Cipher.DECRYPT_MODE, key);  
 		ByteArrayInputStream bais = new ByteArrayInputStream(encrypted);
