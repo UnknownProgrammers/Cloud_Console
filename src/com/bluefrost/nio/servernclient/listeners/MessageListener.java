@@ -25,14 +25,15 @@ public class MessageListener implements Listener{
 			Client c = ClientManager.get(event.sc);
 			if(o instanceof EncryptedObject){o = ((EncryptedObject)o).decrypt(c.getKey());}
 			System.out.println("Object is: " + o.getClass().getSimpleName());
-			if(c.loggedin){
+			if(o instanceof EncryptableObject){((EncryptableObject)o).setSocketChannel(event.getSocketChannel());}
+			if(c.isLoggedIn()){
 				Main.getEventSystem().listen(o);
 			}else{
 				if(o instanceof LoginObject){
 					Main.getEventSystem().listen(o);
 				}
 			}
-		}catch(Exception e){}
+		}catch(Exception e){e.printStackTrace();}
 	}
 	
 	
@@ -42,7 +43,7 @@ public class MessageListener implements Listener{
 		try{
 			synchronized(ClientManager.map){
 				Client c = ClientManager.map.inverse().get(event.getSocketChannel());
-				System.out.println(c.username + " gave us an apple: " + event.a);
+				System.out.println(c.getUsername()+ " gave us an apple: " + event.a);
 
 			}
 		}catch(Exception e){}
