@@ -3,9 +3,11 @@ package com.bluefrost.nio.servernclient.useraccess;
 import java.net.SocketAddress;
 import java.util.HashMap;
 
+import com.bluefrost.nio.servernclient.settings.GlobalSettings;
+
 public class IPMap {
 
-	private static int max = 2;
+	private static int max = GlobalSettings.getSettings().maxIPConnections();
 
 	public static HashMap<SocketAddress, Integer> map = new HashMap<SocketAddress, Integer>();
 
@@ -39,8 +41,5 @@ public class IPMap {
 			}
 		}
 	}
-
-
-
-
+	
 }
