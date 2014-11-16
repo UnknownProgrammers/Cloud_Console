@@ -1,6 +1,5 @@
 package bluefrost.serializable.objects.v1;
 
-import java.security.Key;
 
 public class LoginObject extends EncryptableObject{
 
