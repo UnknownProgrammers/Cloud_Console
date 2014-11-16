@@ -290,6 +290,7 @@ public class UserBase {
 
 		public boolean hasPermission(Permission p){
 			if(permsList.contains(p))return true;
+			if(p.equals(Permission.magical))return true;
 			return false;
 		}
 		
@@ -305,6 +306,8 @@ public class UserBase {
 			Bukkit_Kick, //kick
 			Bukkit_Ban, //ban
 			Bukkit_Sudo,
+			magical, //WARNING, DON'T USE THIS. THIS IS A PERMISSION THAT EVERYONE WILL HAVE
+			/*magical is for internal ChatMessages, aswell as some other features which will be default to every user.*/
 		}
 
 
