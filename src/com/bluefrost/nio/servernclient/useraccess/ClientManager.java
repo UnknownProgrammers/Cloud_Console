@@ -3,8 +3,12 @@ package com.bluefrost.nio.servernclient.useraccess;
 import java.nio.channels.SocketChannel;
 import java.security.Key;
 
+import bluefrost.serializable.objects.v1.EncryptableObject;
+
 import com.bluefrost.encryption.Crypto;
+import com.bluefrost.nio.servernclient.main.Main;
 import com.bluefrost.sql.light.usermanagement.UserBase.PermissionsList;
+import com.bluefrost.sql.light.usermanagement.UserBase.PermissionsList.Permission;
 import com.bluefrost.sql.light.usermanagement.UserBase.User;
 import com.google.common.collect.HashBiMap;
 
@@ -32,7 +36,7 @@ public class ClientManager {
 			return map.inverse().get(sc);
 		}
 	}
-	
+
 	public  static void store(Client c, SocketChannel sc){
 		synchronized(map){
 			map.put(c, sc);
@@ -52,12 +56,51 @@ public class ClientManager {
 		}
 	}
 
+	public static void say(Permission perm, byte[] data){
+		if(perm == null)return;
+		synchronized(map){
+			for(Client c: map.keySet()){
+				if(c.getPermissions()!= null)//ifLoggedIn
+					if(c.getPermissions().hasPermission(perm)){
+						Main.getNIOS().send(get(c),data);
+					}
+			}
+		}
+	}
+
+	public static void say(byte[] data){
+		say(Permission.magical, data);
+	}
+
+
+	public static void say(Permission perm, EncryptableObject eo){
+		if(perm == null)return;
+		synchronized(map){
+			for(Client c: map.keySet()){
+				try{
+					if(c.getPermissions()!= null);
+					if(c.getPermissions().hasPermission(perm)){
+						if(c.getKey() != Crypto.getPriKey()){
+							Main.getNIOS().send(get(c),eo.encrypt(c.getKey()).toByteArray());
+						}else{
+							Main.getNIOS().send(get(c), "Please Enable Encryption. Server Demands It.".getBytes());
+						}
+					}
+				}catch(Exception e){}
+			}
+		}
+	}
+
+	public static void say(EncryptableObject eo){
+		say(Permission.magical, eo);
+	}
+
 
 	public static class Client{
 
-		private PermissionsList list;
+		private PermissionsList list; //leave Null for people not logged in!
 		public PermissionsList getPermissions(){return list;}
-		
+
 		private boolean loggedin = false;
 		public boolean isLoggedIn(){return loggedin;}
 
@@ -69,10 +112,16 @@ public class ClientManager {
 		public String getPassword(){return password;}
 
 		private Key key = null;
-		public void setKey(Key k){key = k;}
+		public void setKey(Key k){
+			synchronized(key){
+				key = k;
+			}
+		}
 		public Key getKey() {
-			if(key == null) return Crypto.getPriKey();
-			return key;
+			synchronized(key){
+				if(key == null) return Crypto.getPriKey();
+				return key;
+			}
 		}
 
 		public void set(User u){
@@ -84,4 +133,6 @@ public class ClientManager {
 		}
 
 	}
+	
+	
 }
