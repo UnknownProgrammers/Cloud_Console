@@ -33,7 +33,6 @@ public class ClientManager {
 		}
 	}
 	
-
 	public  static void store(Client c, SocketChannel sc){
 		synchronized(map){
 			map.put(c, sc);
@@ -51,7 +50,6 @@ public class ClientManager {
 				map.inverse().remove((SocketChannel)o);
 			}
 		}
-		
 	}
 
 
