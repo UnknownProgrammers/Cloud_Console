@@ -22,17 +22,15 @@ public class UserBase {
 	@Deprecated
 	public  UserDatabase getDatabase(){return sqld;}
 
-	@Deprecated
+	@Deprecated 
 	public  static UserBase setup()throws Exception{
-		File f = new File("C:\\Java\\sample.db");
-		UserBase b = new UserBase();
-		b.sqld = new UserDatabase(f);
-		return b;
+		return new UserBase(new UserDatabase(new File("C:\\JavaResources\\sample.db")));
 	}
 	public static UserBase setup(File f) throws Exception{
-		UserBase b = new UserBase();
-		b.sqld = new UserDatabase(f);
-		return b;
+		return new UserBase(new UserDatabase(f));
+	}
+	private UserBase(UserDatabase udb){
+		sqld = udb;
 	}
 
 	@Deprecated
@@ -86,7 +84,6 @@ public class UserBase {
 	}
 
 	public static class UserDatabase {
-
 		private Statement statement;
 		public Statement getStatement(){return statement;}
 
@@ -277,11 +274,7 @@ public class UserBase {
 		private UserDatabase(File f) throws Exception{
 			Load(f); //setup 
 		}
-
-
-
-
-
+		
 	}
 
 	public static class PermissionsList implements Serializable{
@@ -309,7 +302,6 @@ public class UserBase {
 			magical, //WARNING, DON'T USE THIS. THIS IS A PERMISSION THAT EVERYONE WILL HAVE
 			/*magical is for internal ChatMessages, aswell as some other features which will be default to every user.*/
 		}
-
 
 		public static PermissionsList fromByteArray(byte[] array){
 			try{
@@ -342,9 +334,10 @@ public class UserBase {
 				return null;
 			}
 		}
+	
 	}
 
-	public static class User{
+	public static class User{	
 		public String username;
 		public String password;
 		public String displayname;
@@ -356,6 +349,7 @@ public class UserBase {
 			displayname = (String) s[2];
 			list = (PermissionsList)s[3];
 		}
+	
 	}
 
 }
