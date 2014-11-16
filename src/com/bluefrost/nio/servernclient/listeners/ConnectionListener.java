@@ -2,12 +2,14 @@ package com.bluefrost.nio.servernclient.listeners;
 
 import java.nio.channels.SocketChannel;
 
+import bluefrost.serializable.objects.v1.CM;
 import bluefrost.serializable.objects.v1.KeyObject;
 
 import com.bluefrost.encryption.Crypto;
 import com.bluefrost.nio.servernclient.events.EventSystemWrapper.EventSystem.EventHandler;
 import com.bluefrost.nio.servernclient.events.EventSystemWrapper.EventSystem.Listener;
 import com.bluefrost.nio.servernclient.main.Main;
+import com.bluefrost.nio.servernclient.useraccess.ClientManager;
 import com.bluefrost.nio.servernclient.useraccess.IPMap;
 
 public class ConnectionListener implements Listener{
