@@ -39,11 +39,9 @@ public class DisconnectListener implements Listener{
 		private SocketChannel sc;
 		public SocketChannel getSocketChannel(){return sc;}
 
-
 		public ClientDisconnectEvent(SocketChannel channel){
 			sc = channel;
 		}
-
 
 	}
 
