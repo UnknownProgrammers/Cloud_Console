@@ -2,6 +2,7 @@ package com.bluefrost.nio.servernclient.useraccess;
 
 import java.nio.channels.SocketChannel;
 import java.security.Key;
+import java.util.concurrent.ConcurrentHashMap;
 
 import bluefrost.serializable.objects.v1.EncryptableObject;
 
@@ -98,6 +99,9 @@ public class ClientManager {
 
 	public static class Client{
 
+		private ConcurrentHashMap<String, Object> m = new ConcurrentHashMap<String, Object>();
+		public ConcurrentHashMap<String, Object> getMetaData(){return m;}
+		
 		private PermissionsList list; //leave Null for people not logged in!
 		public PermissionsList getPermissions(){return list;}
 
@@ -131,7 +135,8 @@ public class ClientManager {
 			loggedin = true;
 			this.displayname = u.displayname;
 		}
-
+		
+		
 	}
 	
 	
