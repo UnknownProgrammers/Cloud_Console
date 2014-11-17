@@ -223,13 +223,14 @@ public class NIOS implements Runnable{
 		this.worker.processData(this, socketChannel, this.readBuffer.array(), numRead);
 	}
 
-	public void terminateAllClients(){
+	@Deprecated public void terminateAllClients(){
 		try{
 
 		}catch(Exception e){}
 	}
 
 	private void write(SelectionKey key) throws IOException {
+		try{
 		SocketChannel socketChannel = (SocketChannel) key.channel();
 
 		synchronized (this.pendingData) {
@@ -254,6 +255,7 @@ public class NIOS implements Runnable{
 				key.interestOps(SelectionKey.OP_READ);
 			}
 		}
+		}catch(Exception e){e.printStackTrace();}
 	}
 
 	private Selector initSelector() throws IOException {

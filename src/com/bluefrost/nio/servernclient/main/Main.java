@@ -2,14 +2,18 @@ package com.bluefrost.nio.servernclient.main;
 
 import java.io.File;
 
+import bluefrost.serializable.objects.v1.CM;
+
 import com.bluefrost.encryption.Crypto;
 import com.bluefrost.nio.servernclient.events.EventSystemWrapper;
+import com.bluefrost.nio.servernclient.listeners.ChatServerListener;
 import com.bluefrost.nio.servernclient.listeners.ConnectionListener;
 import com.bluefrost.nio.servernclient.listeners.DisconnectListener;
 import com.bluefrost.nio.servernclient.listeners.KeyObjectListener;
 import com.bluefrost.nio.servernclient.listeners.LoginListener;
 import com.bluefrost.nio.servernclient.listeners.MessageListener;
 import com.bluefrost.nio.servernclient.server.NIOS;
+import com.bluefrost.nio.servernclient.useraccess.ClientManager;
 import com.bluefrost.sql.light.usermanagement.UserBase;
 
 /*
@@ -32,7 +36,7 @@ public class Main {
 	private static NIOS nios;
 	public static NIOS getNIOS(){return nios;}
 	
-	@SuppressWarnings("deprecation")
+	//@SuppressWarnings("deprecation")
 	public static void main(String[] args){
 		try{
 			System.out.println("Setting up UserManager DataBase...");
@@ -55,11 +59,13 @@ public class Main {
 			
 			
 			
+			
+			Thread.sleep(10000);
+			System.out.println("Test!");
+			ClientManager.say(new CM("Test").toByteArray());
+		//	System.out.println("END");
+			//nios.end();
 			//*/
-			Thread.sleep(1000);
-			
-			
-		//	nios.end();
 		 
 		}catch(Exception e){e.printStackTrace();}
 	}
@@ -74,6 +80,7 @@ public class Main {
 		esw.addListener(new DisconnectListener());
 		esw.addListener(new ConnectionListener());
 		esw.addListener(new KeyObjectListener());
+		esw.addListener(new ChatServerListener());
 	}
 
 }
