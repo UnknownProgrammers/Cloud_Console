@@ -20,7 +20,7 @@ import java.util.List;
 public class EventSystemWrapper {
 	
 	private EventSystem es = new EventSystem();
-	@Deprecated public EventSystem getEventSystem(){return es;}
+	@Deprecated public EventSystem getEventSystem(){return es;} //WARNING: Not Thread Safe
 	
 	public void addListener(EventSystem.Listener l){
 		synchronized(es){
