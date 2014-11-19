@@ -7,7 +7,7 @@ import com.bluefrost.nio.servernclient.settings.GlobalSettings;
 
 public class IPMap {
 
-	private static int max = GlobalSettings.getSettings().maxIPConnections();
+	private static int max = (int)GlobalSettings.getSettings().pull("[IPMap] Max Connextions");
 
 	public static HashMap<SocketAddress, Integer> map = new HashMap<SocketAddress, Integer>();
 
