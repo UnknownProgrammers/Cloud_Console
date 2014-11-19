@@ -6,17 +6,28 @@ public class GlobalSettings {
 	public static void setSettings(Settings s){GlobalSettings.s = s;}
 	public static Settings getSettings(){return s;}
 	
+	public static Object pull(String s){
+		return GlobalSettings.s.pull(s);
+	}
 	
 	public static abstract class Settings {
-		
-		public abstract int maxIPConnections();
-		
+		public abstract Object pull(String s);
 	}
 	
 	
-	private static class DefaultSettings extends Settings{
+	private static class DefaultSettings extends Settings {
 
-		@Override public int maxIPConnections() {return 5;}
+		@Override
+		public Object pull(String s) {
+			switch(s){
+				case "[IPMap] Max Connextions":
+					return 5;
+				
+				
+			}
+			return false;
+		}
+
 		
 	}
 	
