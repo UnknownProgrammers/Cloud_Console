@@ -7,4 +7,6 @@ public class TODO {
 	 *  [ ] Test new Serialization with AES(128) Encryption
 	 *  
 	 */
+	 
+	 //Note By Blue: Im not so sure about GSON
 }
