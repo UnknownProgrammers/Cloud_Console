@@ -22,7 +22,8 @@ public class GlobalSettings {
 			switch(s){
 				case "[IPMap] Max Connextions":
 					return 5;
-				
+				case "[Encryption] Level":
+					return 3;
 				
 			}
 			return false;

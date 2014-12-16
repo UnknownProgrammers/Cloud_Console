@@ -16,6 +16,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 import com.bluefrost.nio.servernclient.listeners.ConnectionListener.ConnectionEvent;
 import com.bluefrost.nio.servernclient.listeners.DisconnectListener.ClientDisconnectEvent;
@@ -305,6 +306,13 @@ public class NIOS implements Runnable{
 	}
 
 
+	public static class SecondaryWorker implements Runnable{
+		public ConcurrentLinkedQueue<Object> queue = new ConcurrentLinkedQueue<Object>();
+		
+		public void run(){
+			
+		}
+	}
 	
 	public static class Worker implements Runnable{
 

@@ -8,7 +8,6 @@ import bluefrost.serializable.objects.v1.EncryptedObject;
 import bluefrost.serializable.objects.v1.LoginObject;
 import bluefrost.serializable.objects.v1.Utils;
 
-import com.bluefrost.encryption.Crypto;
 import com.bluefrost.nio.servernclient.events.EventSystemWrapper.EventSystem.EventHandler;
 import com.bluefrost.nio.servernclient.events.EventSystemWrapper.EventSystem.Listener;
 import com.bluefrost.nio.servernclient.main.Main;
@@ -21,7 +20,11 @@ public class MessageListener implements Listener{
 	@EventHandler
 	public void onMessageEvent(MessageEvent event){
 		try{
-			Object o = Utils.fromByteArray(event.b);
+			Object o = Utils.fromByteArray(event.b);	
+			if(o instanceof String){//assume its json    //****************************
+				GSONListener.listen((String)o, event.sc);//	Gson/Json              	  *
+				return;									 //	Listener                  *
+			}											 //////////////////////////////	
 			Client c = ClientManager.get(event.sc);
 			if(o instanceof EncryptedObject){o = ((EncryptedObject)o).decrypt(c.getKey());}
 			System.out.println("Object is: " + o.getClass().getSimpleName());

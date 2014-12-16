@@ -62,9 +62,9 @@ public class Crypto
 			if(k instanceof PublicKey){alg = "RSA";}
 			else{alg = "AES";}
 			Cipher cipher = Cipher.getInstance(alg);
-			cipher.init(Cipher.ENCRYPT_MODE, pubkey);
+			cipher.init(Cipher.ENCRYPT_MODE, k);
 			encryptedData = cipher.doFinal(data);
-		} catch (Exception e) {e.printStackTrace();} 
+		} catch (Exception e) {System.out.println("ERROR Encrypting Data!");e.printStackTrace();} 
 		return encryptedData;
 	}
 
@@ -90,6 +90,13 @@ public class Crypto
 		byte[] key = new byte[16];
 		sr.nextBytes(key);
 		return new SecretKeySpec(key,"AES");
+	}
+	
+	public static SecurityLevel securityLevel = SecurityLevel.FullEncryption;
+	public static enum SecurityLevel{
+		LoginOnly,
+		PlainText,
+		FullEncryption
 	}
 	
 }

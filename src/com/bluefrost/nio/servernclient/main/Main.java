@@ -1,19 +1,17 @@
 package com.bluefrost.nio.servernclient.main;
 
-import java.io.File;
+import bluefrost.serializable.objects.v1.json.MyJsonUtils;
+import bluefrost.serializable.objects.v1.json.TestClass;
 
-import bluefrost.serializable.objects.v1.CM;
-
-import com.bluefrost.encryption.Crypto;
 import com.bluefrost.nio.servernclient.events.EventSystemWrapper;
 import com.bluefrost.nio.servernclient.listeners.ChatServerListener;
 import com.bluefrost.nio.servernclient.listeners.ConnectionListener;
 import com.bluefrost.nio.servernclient.listeners.DisconnectListener;
+import com.bluefrost.nio.servernclient.listeners.GSONListener;
 import com.bluefrost.nio.servernclient.listeners.KeyObjectListener;
 import com.bluefrost.nio.servernclient.listeners.LoginListener;
 import com.bluefrost.nio.servernclient.listeners.MessageListener;
 import com.bluefrost.nio.servernclient.server.NIOS;
-import com.bluefrost.nio.servernclient.useraccess.ClientManager;
 import com.bluefrost.sql.light.usermanagement.UserBase;
 
 /*
@@ -39,6 +37,18 @@ public class Main {
 	//@SuppressWarnings("deprecation")
 	public static void main(String[] args){
 		try{
+			TestClass to = new TestClass();
+			String s = to.toString();
+			System.out.println(s);
+			registerEvents();
+			Class<?> c = MyJsonUtils.findClass("TestClass");
+			System.out.println(c);
+			
+			for(Class<?> cl: ClassFinder.find("bluefrost.serializable.objects.v1.json")){
+				System.out.println(cl);
+			}
+			
+			/*
 			System.out.println("Setting up UserManager DataBase...");
 			
 			ub1 = UserBase.setup(new File("C:\\JavaResources\\Simple.db"));
@@ -75,6 +85,7 @@ public class Main {
 
 
 	public static void registerEvents(){
+		esw.addListener(new GSONListener());
 		esw.addListener(new LoginListener());
 		esw.addListener(new MessageListener());
 		esw.addListener(new DisconnectListener());
