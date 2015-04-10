@@ -1,0 +1,2 @@
+Change  permissions byte[] to permissions String 
+The string will be Json { String[] } to make it easier on myself

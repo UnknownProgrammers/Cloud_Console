@@ -12,4 +12,8 @@ public class ChatServerListener implements Listener{
 		ClientManager.say(new bluefrost.serializable.objects.v1.CM(ClientManager.get(event.getSocketChannel()).getDisplayName()+": " +event.getMessage()));
 	}
 	
+	// ^ Kill This. 
+	
+	
+	
 }

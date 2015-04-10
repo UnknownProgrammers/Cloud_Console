@@ -29,11 +29,8 @@ public class MyJsonUtils {
 		}
 	}
 	
-	
 	public static Object fromString(String s) throws Exception{
-		GSONListener.GSONObjectFinder gof = GSONListener.g.fromJson(s, GSONObjectFinder.class);
-		Class<?> c = MyJsonUtils.findClass(gof.name);
-		return GSONListener.g.fromJson(s, c);
+		return GSONListener.g.fromJson(s, MyJsonUtils.findClass(GSONListener.g.fromJson(s, GSONObjectFinder.class).name));
 	}
 	
 	public static Class<?> findClass(String name) throws ClassNotFoundException{

@@ -341,7 +341,6 @@ public class NIOS implements Runnable{
 					}
 					dataEvent = (ServerDataEvent) queue.remove(0);
 				}
-
 				if(dataEvent == null)break;
 				Main.getEventSystem().listen(new MessageEvent(dataEvent.data,dataEvent.socket));
 				//dataEvent.server.send(dataEvent.socket, dataEvent.data);

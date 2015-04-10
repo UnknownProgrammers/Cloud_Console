@@ -12,4 +12,6 @@ public class TODO {
 	 
 	 //Note By Blue: Im not so sure about GSON
 	 //Note by Unknown: Too bad, Already adding implementation of Json and Gson.
+	
+	//get rid of Java's Serialization!
 }
