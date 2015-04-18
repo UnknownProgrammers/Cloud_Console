@@ -8,7 +8,7 @@ import bluefrost.serializable.objects.v1.EncryptableObject;
 
 import com.bluefrost.encryption.Crypto;
 import com.bluefrost.nio.servernclient.main.Main;
-import com.bluefrost.sql.light.usermanagement.UserBase.PermissionsList;
+import com.bluefrost.sql.light.usermanagement.CopyOfUserBase.PermissionsJson;
 import com.bluefrost.sql.light.usermanagement.UserBase.PermissionsList.Permission;
 import com.bluefrost.sql.light.usermanagement.UserBase.User;
 import com.google.common.collect.HashBiMap;
@@ -38,7 +38,7 @@ public class ClientManager {
 		}
 	}
 
-	public  static void store(Client c, SocketChannel sc){
+	public static void store(Client c, SocketChannel sc){
 		synchronized(map){
 			map.put(c, sc);
 		}
@@ -102,8 +102,8 @@ public class ClientManager {
 		private ConcurrentHashMap<String, Object> m = new ConcurrentHashMap<String, Object>();
 		public ConcurrentHashMap<String, Object> getMetaData(){return m;}
 		
-		private PermissionsList list; //leave Null for people not logged in!
-		public PermissionsList getPermissions(){return list;}
+		private PermissionsJson list = null; //leave Null for people not logged in!
+		public PermissionsJson getPermissions(){return list;}
 
 		private boolean loggedin = false;
 		public boolean isLoggedIn(){return loggedin;}
@@ -115,6 +115,14 @@ public class ClientManager {
 		private String password = "notLoggedIn";
 		public String getPassword(){return password;}
 
+		public void set(String dn, String un, String pw, PermissionsJson pj){
+			displayname = dn; 
+			username = un;
+			password = pw;
+			list = pj;
+			loggedin = true;
+		}
+		
 		private Key key = null;
 		public void setKey(Key k){
 			synchronized(key){
@@ -128,14 +136,6 @@ public class ClientManager {
 			}
 		}
 
-		public void set(User u){
-			this.list = u.list;
-			this.username = u.username;
-			this.password = u.password;
-			loggedin = true;
-			this.displayname = u.displayname;
-		}
-		
 		
 	}
 	
