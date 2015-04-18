@@ -8,6 +8,7 @@ import com.bluefrost.sql.light.usermanagement.UserBase.User;
 
 public class LoginListener implements Listener{
 
+	/*
 	@EventHandler
 	public void _v1(bluefrost.serializable.objects.v1.LoginObject event){
 		try{
@@ -32,6 +33,22 @@ public class LoginListener implements Listener{
 			}
 		}catch(Exception e){}
 	}
-	
-	
+	//*/
+
+
+	@EventHandler
+	public void _v2(bluefrost.serializable.objects.v1.json.LoginObject event){
+		try{
+		
+			//if(Main.getDefaultUserBase().validateUser(event.getUsername(), event.getPassword(),ClientManager.get(event.getSocketChannel()))){
+
+			System.out.println("User " + event.getUsername()+" Logged In!");
+			//Main.getNIOS().send(event.getSocketChannel(), new bluefrost.serializable.objects.v1.LoggedInSuccessObject().toByteArray());
+			//Above, make an Alert message? or something? or a new JsonObject.
+		//	}
+			
+			
+			
+		}catch(Exception e){}
+	}
 }
